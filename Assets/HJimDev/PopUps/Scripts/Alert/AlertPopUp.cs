@@ -16,19 +16,18 @@ namespace UI
             public class AlertPopUp : BasePopUp
             {
                 [SerializeField] Button confirmButton;
+                [SerializeField] TMP_Text confirmButtonText;
                 [SerializeField] Image background;
                 [SerializeField] TMP_Text message;
                 ConfirmDelegate confirmDelegate;
 
-                public TMP_Text Message { get { return message; } }
+                public Button ConfirmButton { get { return confirmButton; } }
+                public TMP_Text ConfirmButtonText { get { return confirmButtonText; } }
                 public Image Background { get { return background; } }
+                public TMP_Text Message { get { return message; } }
 
                 protected override bool Initialize(params object[] args)
                 {
-                    ValidateField(nameof(message), message);
-                    ValidateField(nameof(background), background);
-                    ValidateField(nameof(confirmButton), confirmButton);
-
                     bool initialized = base.Initialize(args);
                     if (initialized)
                     {
@@ -38,6 +37,26 @@ namespace UI
                         confirmButton.onClick.AddListener(Confirm);
                     }
                     return initialized;
+                }
+
+                protected override void InitializeUIElements()
+                {
+                    ValidateField(nameof(confirmButton), confirmButton);
+                    ValidateField(nameof(confirmButtonText), confirmButtonText);
+                    ValidateField(nameof(background), background);
+                    ValidateField(nameof(message), message);
+
+                    ColorBlock colors = confirmButton.colors;
+                    colors.normalColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
+                    colors.highlightedColor = PopUpsManager.DefaultManager.Palette.Secondary.Lighten2.Color;
+                    colors.pressedColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken2.Color;
+                    colors.selectedColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
+                    colors.disabledColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken1.Color;
+                    confirmButton.colors = colors;
+
+                    confirmButtonText.color = PopUpsManager.DefaultManager.Palette.Secondary.TextColor;
+                    background.color = PopUpsManager.DefaultManager.Palette.Surface.Color;
+                    message.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
                 }
 
                 public bool Initialize(string message, ConfirmDelegate confirmDelegate)

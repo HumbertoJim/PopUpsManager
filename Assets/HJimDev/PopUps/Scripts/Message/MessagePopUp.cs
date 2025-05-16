@@ -20,14 +20,21 @@ namespace UI
 
                 protected override bool Initialize(params object[] args)
                 {
-                    ValidateField(nameof(title), title);
-
                     bool initialized = base.Initialize(args);
                     if (initialized)
                     {
                         title.text = ValidateParameter(2, nameof(title), "");
                     }
                     return initialized;
+                }
+
+                protected override void InitializeUIElements()
+                {
+                    base.InitializeUIElements();
+
+                    ValidateField(nameof(title), title);
+
+                    title.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
                 }
 
                 public bool Initialize(string title, string message, ConfirmDelegate confirmDelegate)

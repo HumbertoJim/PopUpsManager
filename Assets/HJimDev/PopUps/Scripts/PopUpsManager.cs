@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UI.PopUps.Alert;
 using UI.PopUps.Message;
 using UI.PopUps.Input;
 using UI.PopUps.Select;
 using UI.PopUps.Confirm;
 using UI.PopUps.Notification;
+using UI.Palettes;
 
 
 namespace UI
@@ -27,10 +29,13 @@ namespace UI
                     initialized = true;
                     this.args = args;
                     closed = false;
+                    InitializeUIElements();
                     return true;
                 }
                 return false;
             }
+
+            protected virtual void InitializeUIElements() { }
 
             protected virtual bool Close()
             {
@@ -78,7 +83,7 @@ namespace UI
         public class PopUpsManager : MonoBehaviour
         {
             private static PopUpsManager manager;
-
+            private Palette palette;
             private Canvas canvas;
             Dictionary<string, GameObject> prefabs;
 
@@ -91,10 +96,18 @@ namespace UI
                         GameObject instance = new("PopUpsManager");
                         manager = instance.AddComponent<PopUpsManager>();
                         manager.prefabs = new();
+                        manager.palette = new(Color.black, Color.gray, Color.white, Color.white, Color.red);
                         DontDestroyOnLoad(manager);
                     }
                     return manager;
                 }
+            }
+
+            public Palette Palette { get { return palette; } }
+
+            public void SetPalette(Palette palette)
+            {
+                this.palette = palette;
             }
 
             private Canvas GetCanvas()
@@ -159,7 +172,7 @@ namespace UI
                 return popup;
             }
 
-            public NotificationPopUp ShowNotification(string title, string message, Level level = Level.Info, float lifeTime = 5)
+            public NotificationPopUp ShowNotification(string title, string message, NotificationLevel level = NotificationLevel.Info, float lifeTime = 5)
             {
                 NotificationPopUp popup = LoadPopUp<NotificationPopUp>("Notification");
                 popup.Initialize(title, message, level, lifeTime);

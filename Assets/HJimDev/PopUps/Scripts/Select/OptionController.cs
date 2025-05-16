@@ -29,7 +29,8 @@ namespace UI
                 bool isFixed;
 
                 public Option Option { get; private set; }
-                public bool IsOn { get { return toggle.isOn; } }
+                public Toggle Toggle { get { return toggle; } }
+                public TMP_Text Label { get { return label; } }
 
                 public void SetInformation(Option option, ToggleGroup group)
                 {
