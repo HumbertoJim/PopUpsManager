@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UI.PopUps.Select;
+using UI.Palettes;
+using UI.Palettes.Adapters;
+using EventBus;
 
 namespace UI
 {
@@ -13,22 +16,30 @@ namespace UI
         {
             public class TestPopUps : MonoBehaviour
             {
-                [SerializeField] Palettes.PaletteScriptableObject paletteScriptableObject;
+                [SerializeField] PaletteScriptableObject[] palettes;
                 [SerializeField] Image background;
                 [SerializeField] Image topBar;
                 [SerializeField] TMP_Text topBarText;
-                Palettes.Palette palette;
+                [SerializeField] Button changePaletteButton;
+                [SerializeField] TMP_Text changePaletteButtonText;
+                int paletteIndex;
                 Option opt1;
                 Option opt2;
 
                 private void Start()
                 {
-                    palette = paletteScriptableObject.ToPalette();
-                    PopUpsManager.DefaultManager.SetPalette(palette);
+                    paletteIndex = -1;
 
-                    background.color = palette.Background.Color;
-                    topBar.color = palette.Primary.Color;
-                    topBarText.color = palette.Primary.TextColor;
+                    EventManager.DefaultManager.Subscribe(Palettes.Events.Constants.ChangePalette, gameObject, (message) =>
+                    {
+                        background.color = PaletteManager.DefaultManager.Palette.Background.Color;
+                        topBar.color = PaletteManager.DefaultManager.Palette.Primary.Color;
+                        topBarText.color = PaletteManager.DefaultManager.Palette.Primary.TextColor;
+                        PaletteManager.DefaultManager.ApplyBlockColorPalette(new ButtonAdapter(changePaletteButton), new TMP_TextAdapter(changePaletteButtonText));
+                    });
+
+                    changePaletteButton.onClick.AddListener(ChangePalette);
+                    ChangePalette();
 
                     opt1 = new(0, "Repetir");
                     opt2 = new(1, "Finalizar");
@@ -73,6 +84,15 @@ namespace UI
                     if (confirm)
                     {
                         ShowAlert();
+                    }
+                }
+
+                void ChangePalette()
+                {
+                    if(palettes.Length > 0)
+                    {
+                        paletteIndex = (paletteIndex + 1) % palettes.Length;
+                        PaletteManager.DefaultManager.Palette = palettes[paletteIndex].ToPalette();
                     }
                 }
             }

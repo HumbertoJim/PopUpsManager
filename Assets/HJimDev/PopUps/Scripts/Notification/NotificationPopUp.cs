@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UI.Palettes;
+using UI.Palettes.Adapters;
 
 namespace UI
 {
@@ -50,17 +52,15 @@ namespace UI
 
                     level = ValidateParameter(2, nameof(level), NotificationLevel.Info);
 
-                    Palettes.PaletteColor paletteColor = level switch
+                    PaletteColor paletteColor = level switch
                     {
-                        NotificationLevel.Info => PopUpsManager.DefaultManager.Palette.Secondary.Darken3,
-                        NotificationLevel.Success => PopUpsManager.DefaultManager.Palette.Secondary,
-                        NotificationLevel.Warning => PopUpsManager.DefaultManager.Palette.Error.Lighten3,
-                        NotificationLevel.Error => PopUpsManager.DefaultManager.Palette.Error,
-                        _ => PopUpsManager.DefaultManager.Palette.Secondary.Darken3
+                        NotificationLevel.Info => PaletteManager.DefaultManager.Palette.Secondary.Darken3,
+                        NotificationLevel.Success => PaletteManager.DefaultManager.Palette.Secondary,
+                        NotificationLevel.Warning => PaletteManager.DefaultManager.Palette.Error.Lighten3,
+                        NotificationLevel.Error => PaletteManager.DefaultManager.Palette.Error,
+                        _ => PaletteManager.DefaultManager.Palette.Secondary.Darken3
                     };
-                    background.color = paletteColor.Color;
-                    title.color = paletteColor.TextColor;
-                    message.color = paletteColor.TextColor;
+                    PaletteManager.DefaultManager.ApplySurfacePalette(background, paletteColor, new TMP_TextAdapter(title), new TMP_TextAdapter(message));
                 }
 
                 public bool Initialize(string title, string message, NotificationLevel level = NotificationLevel.Info, float lifeTime=5)

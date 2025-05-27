@@ -10,6 +10,7 @@ using UI.PopUps.Select;
 using UI.PopUps.Confirm;
 using UI.PopUps.Notification;
 using UI.Palettes;
+using EventBus;
 
 
 namespace UI
@@ -27,6 +28,7 @@ namespace UI
                 if (!initialized)
                 {
                     initialized = true;
+                    EventManager.DefaultManager.Subscribe(Palettes.Events.Constants.ChangePalette, gameObject, (message) => { InitializeUIElements(); });
                     this.args = args;
                     closed = false;
                     InitializeUIElements();
@@ -42,6 +44,7 @@ namespace UI
                 if (!closed)
                 {
                     closed = true;
+                    EventManager.DefaultManager.Unsubscribe(Palettes.Events.Constants.ChangePalette, gameObject);
                     Destroy(gameObject);
                     return true;
                 }
@@ -62,7 +65,7 @@ namespace UI
                 {
                     if (args[index] is T parsed)
                     {
-                        return parsed; 
+                        return parsed;
                     }
                     else
                     {
@@ -83,7 +86,6 @@ namespace UI
         public class PopUpsManager : MonoBehaviour
         {
             private static PopUpsManager manager;
-            private Palette palette;
             private Canvas canvas;
             Dictionary<string, GameObject> prefabs;
 
@@ -96,18 +98,10 @@ namespace UI
                         GameObject instance = new("PopUpsManager");
                         manager = instance.AddComponent<PopUpsManager>();
                         manager.prefabs = new();
-                        manager.palette = new(Color.black, Color.gray, Color.white, Color.white, Color.red);
                         DontDestroyOnLoad(manager);
                     }
                     return manager;
                 }
-            }
-
-            public Palette Palette { get { return palette; } }
-
-            public void SetPalette(Palette palette)
-            {
-                this.palette = palette;
             }
 
             private Canvas GetCanvas()

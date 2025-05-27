@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using UI.Palettes;
+using UI.Palettes.Adapters;
 
 namespace UI
 {
@@ -58,38 +60,15 @@ namespace UI
                     ValidateField(nameof(inputFieldText), inputFieldText);
                     ValidateField(nameof(title), title);
 
-                    ColorBlock colors;
-
-                    colors = submitButton.colors;
-                    colors.normalColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.highlightedColor = PopUpsManager.DefaultManager.Palette.Secondary.Lighten2.Color;
-                    colors.pressedColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken2.Color;
-                    colors.selectedColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.disabledColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken1.Color;
-                    submitButton.colors = colors;
-
-                    submitButtonText.color = PopUpsManager.DefaultManager.Palette.Secondary.TextColor;
-
-                    background.color = PopUpsManager.DefaultManager.Palette.Surface.Color;
-
-                    colors = inputField.colors;
-                    colors.normalColor = PopUpsManager.DefaultManager.Palette.Surface.Color;
-                    colors.highlightedColor = PopUpsManager.DefaultManager.Palette.Surface.Lighten2.Color;
-                    colors.pressedColor = PopUpsManager.DefaultManager.Palette.Surface.Darken2.Color;
-                    colors.selectedColor = PopUpsManager.DefaultManager.Palette.Surface.Color;
-                    colors.disabledColor = PopUpsManager.DefaultManager.Palette.Surface.Darken1.Color;
-                    inputField.colors = colors;
-
-                    inputFieldText.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
-
+                    PaletteManager.DefaultManager.ApplyBlockColorPalette(new ButtonAdapter(submitButton), new TMP_TextAdapter(submitButtonText));
+                    PaletteManager.DefaultManager.ApplySurfacePalette(background, new TMP_TextAdapter(title));
+                    PaletteManager.DefaultManager.ApplyBlockColorPalette(new TMP_InputFieldAdapter(inputField), PaletteManager.DefaultManager.Palette.Surface, new TMP_TextAdapter(inputFieldText), new TMP_TextAdapter(inputFieldPlaceholder));
                     inputFieldPlaceholder.color = new(
-                        PopUpsManager.DefaultManager.Palette.Surface.TextColor.r,
-                        PopUpsManager.DefaultManager.Palette.Surface.TextColor.g,
-                        PopUpsManager.DefaultManager.Palette.Surface.TextColor.b,
-                        PopUpsManager.DefaultManager.Palette.Surface.TextColor.a / 2f
+                        inputFieldPlaceholder.color.r,
+                        inputFieldPlaceholder.color.g,
+                        inputFieldPlaceholder.color.b,
+                        inputFieldPlaceholder.color.a / 2f
                     );
-
-                    title.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
                 }
 
                 public bool Initialize(string title, SubmitDelegate submitDelegate, bool allowEmpty=true)

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UI.Palettes;
+using UI.Palettes.Adapters;
 
 namespace UI
 {
@@ -68,30 +70,11 @@ namespace UI
                     ValidateField(nameof(toggleGroup), toggleGroup);
                     ValidateField(nameof(optionPrefab), optionPrefab);
 
-                    ColorBlock colors;
-                    
-                    colors = selectButton.colors;
-                    colors.normalColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.highlightedColor = PopUpsManager.DefaultManager.Palette.Secondary.Lighten2.Color;
-                    colors.pressedColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken2.Color;
-                    colors.selectedColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.disabledColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken1.Color;
-                    selectButton.colors = colors;
-
-                    selectButtonText.color = PopUpsManager.DefaultManager.Palette.Secondary.TextColor;
-                    background.color = PopUpsManager.DefaultManager.Palette.Surface.Color;
-                    title.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
-
-                    Palettes.PaletteColor optionColor = PopUpsManager.DefaultManager.Palette.Secondary.Lighten1;
                     OptionController opt = optionPrefab.GetComponent<OptionController>();
-                    colors = opt.Toggle.colors;
-                    colors.normalColor = optionColor.Color;
-                    colors.highlightedColor = optionColor.Lighten2.Color;
-                    colors.pressedColor = optionColor.Darken2.Color;
-                    colors.selectedColor = optionColor.Color;
-                    colors.disabledColor = optionColor.Darken1.Color;
-                    opt.Toggle.colors = colors;
-                    opt.Label.color = optionColor.TextColor;
+
+                    PaletteManager.DefaultManager.ApplyBlockColorPalette(new ButtonAdapter(selectButton), new TMP_TextAdapter(selectButtonText));
+                    PaletteManager.DefaultManager.ApplyBlockColorPalette(new ToggleAdapter(opt.Toggle), PaletteManager.DefaultManager.Palette.Secondary.Lighten1, new TMP_TextAdapter(opt.Label));
+                    PaletteManager.DefaultManager.ApplySurfacePalette(background, new TMP_TextAdapter(title));
                 }
 
                 public bool Initialize(string title, List<Option> options, SelectDelegate selectDelegate)

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UI.PopUps.Alert;
+using UI.Palettes;
 
 namespace UI
 {
@@ -34,7 +35,7 @@ namespace UI
 
                     ValidateField(nameof(title), title);
 
-                    title.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
+                    title.color = PaletteManager.DefaultManager.Palette.Surface.TextColor;
                 }
 
                 public bool Initialize(string title, string message, ConfirmDelegate confirmDelegate)

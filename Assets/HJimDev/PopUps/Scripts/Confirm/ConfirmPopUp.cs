@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UI.Palettes;
+using UI.Palettes.Adapters;
 
 namespace UI
 {
@@ -52,31 +54,9 @@ namespace UI
                     ValidateField(nameof(background), background);
                     ValidateField(nameof(message), message);
 
-                    ColorBlock colors;
-
-                    colors = agreeButton.colors;
-                    colors.normalColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.highlightedColor = PopUpsManager.DefaultManager.Palette.Secondary.Lighten2.Color;
-                    colors.pressedColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken2.Color;
-                    colors.selectedColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.disabledColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken1.Color;
-                    agreeButton.colors = colors;
-
-                    agreeButtonText.color = PopUpsManager.DefaultManager.Palette.Secondary.TextColor;
-
-                    Palettes.PaletteColor disagreeColor = PopUpsManager.DefaultManager.Palette.Secondary;
-                    colors = disagreeButton.colors;
-                    colors.normalColor = disagreeColor.Color;
-                    colors.highlightedColor = disagreeColor.Lighten2.Color;
-                    colors.pressedColor = disagreeColor.Darken2.Color;
-                    colors.selectedColor = disagreeColor.Color;
-                    colors.disabledColor = disagreeColor.Darken1.Color;
-                    disagreeButton.colors = colors;
-
-                    disagreeButtonText.color = disagreeColor.TextColor;
-
-                    background.color = PopUpsManager.DefaultManager.Palette.Surface.Color;
-                    message.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
+                    PaletteManager.DefaultManager.ApplyBlockColorPalette(new ButtonAdapter(agreeButton), new TMP_TextAdapter(agreeButtonText));
+                    PaletteManager.DefaultManager.ApplyBlockColorPalette(new ButtonAdapter(disagreeButton), new TMP_TextAdapter(disagreeButtonText));
+                    PaletteManager.DefaultManager.ApplySurfacePalette(background, new TMP_TextAdapter(message));
                 }
 
                 public bool Initialize(string message, ConfirmDelegate confirmDelegate)

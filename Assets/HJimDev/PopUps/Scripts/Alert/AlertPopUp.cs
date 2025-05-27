@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UI.Palettes;
+using UI.Palettes.Adapters;
 
 namespace UI
 {
@@ -46,17 +48,8 @@ namespace UI
                     ValidateField(nameof(background), background);
                     ValidateField(nameof(message), message);
 
-                    ColorBlock colors = confirmButton.colors;
-                    colors.normalColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.highlightedColor = PopUpsManager.DefaultManager.Palette.Secondary.Lighten2.Color;
-                    colors.pressedColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken2.Color;
-                    colors.selectedColor = PopUpsManager.DefaultManager.Palette.Secondary.Color;
-                    colors.disabledColor = PopUpsManager.DefaultManager.Palette.Secondary.Darken1.Color;
-                    confirmButton.colors = colors;
-
-                    confirmButtonText.color = PopUpsManager.DefaultManager.Palette.Secondary.TextColor;
-                    background.color = PopUpsManager.DefaultManager.Palette.Surface.Color;
-                    message.color = PopUpsManager.DefaultManager.Palette.Surface.TextColor;
+                    PaletteManager.DefaultManager.ApplyBlockColorPalette(new ButtonAdapter(confirmButton), new TMP_TextAdapter(confirmButtonText));
+                    PaletteManager.DefaultManager.ApplySurfacePalette(background, new TMP_TextAdapter(message));
                 }
 
                 public bool Initialize(string message, ConfirmDelegate confirmDelegate)
